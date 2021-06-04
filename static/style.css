@@ -1,0 +1,47 @@
+body {
+  /* font stack */
+  font-family: Verbana, sans-serif;
+
+  display: flex;
+  flex-direction: column;
+  /* item spacing will be controlled by flex-grow */
+
+  min-height: 100vh;
+  /* the height of the body is at least the height of the viewport */
+
+  /* set background-color of the whole page */
+  background-color: #F0FFFF;
+}
+
+nav{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  padding-bottom: 2%;
+  background-color: #379683;
+  color: #05386b;
+}
+
+.content{
+  color: #05386b;
+}
+
+.dataEntry{
+  display: flex;
+  justify-content: space-between;
+  padding: 0.8%;
+}
+
+.sample{
+  word-break: break-all;
+  overflow:hidden;
+}
+
+.dataInput{
+  height: 14px;
+  background-color: #edf5e1;
+}
+
+.title {
+  text-align: center
+}

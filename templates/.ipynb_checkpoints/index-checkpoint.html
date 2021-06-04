@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <title>ECS 171 Heart Disease Predictor</title>
+    
+    <!-- stylesheet(s) -->
+    <link rel="stylesheet" href="../static/reset.css" />
+    <link rel="stylesheet" href="../static/style.css" />
+
+  </head>
+  <script>
+    function sendData() {
+    //classes are always referenced with '.CLASS_NAME', id's always referenced with '#ID_NAME'
+    var age= $('#age').val();
+    var sex= $('#sex').val();
+    var cp= $('#cp').val();
+    var trestbps= $('#trestbps').val();
+    var chol= $('#chol').val();
+    var fbs= $('#fbs').val();
+    var restecg= $('#restecg').val();
+    var thalach= $('#thalach').val();
+    var exang= $('#exang').val();
+    var oldpeak= $('#oldpeak').val();
+    var slope= $('#slope').val();
+    var ca= $('#ca').val();
+    var thal= $('#thal').val();
+    //an ajax post request is a HTTP request sent from the client-side(our View) to the the server-side(our Controller)
+    //an ajax post request is expected to send data/information with it--in our case, a JSON with all the user input
+    //another type of ajax request is a get request--this is usually a request for data to be returned, and does not generally also send data
+      $.ajax({
+                  url: "/getModelOutput",
+                  type: "POST",
+                  //obviously should add more data to the JSON, and specify by feature name
+                  data: {age:age,
+                    sex:sex,
+                    cp:cp,
+                    trestbps:trestbps,
+                    chol:chol,
+                    fbs:fbs,
+                    restecg:restecg,
+                    thalach:thalach,
+                    exang:exang,
+                    oldpeak:oldpeak,
+                    slope:slope,
+                    ca:ca,
+                    thal:thal
+                  }
+              }).done(function(response) {
+                //This functin grabs the results of our operation. We may have incentive to separate these in the future
+                //If we do separate these, this function would then become part of an ajax GET request, as we're asking the server to get the output from the model
+
+                //this html variable is just defining a bunch of html objects in one- 2 line breaks, a paragraph containing "RESULT:" in bold, in a new line/paragraph, the value we recieved as output from the server, and another line break
+                var html= "<br><br><br><p> <b> RESULT : <b><p>";
+                response =response.result;
+                     $.each(response,function(key,val){
+                     console.log(val);
+                        html+="<p>"+val+"<p>"
+                    });
+                    html +="<br>";
+                    //this is putting all the html objects defined in the html variable in the div we instantiated in the body
+                    $(".result").append(html);
+                });
+    };</script>
+  <body>
+    <!-- yeah all of this can change-->
+    <!--Assigning classes allows for ease of reference--both for CSS styling as well as for script references-->
+    <nav>
+
+      <!--Home -->
+      <div id='home'>
+        <h3>Home</h3>
+      </div>
+
+      <!--About Page-->
+      <div id='about'>
+        <h3>About</h3>
+      </div>
+    </nav>
+
+    <div class="wrapper">
+      <div class="content" role="main">
+        <h1 class="title">Hello, and welcome to our heart disease predictor</h1>
+        <p>Please enter the relevant info about the patient here:</p>
+        <!--ul = unordered list-->
+        <ol type="1">
+            <!--id's must be unique, should be the feature ids-->
+            <!--li = list item, the input tag represents a generic user input object, the type parameter allows us to limit what the user can enter-->
+            <li class = "dataEntry">Enter the age (in years) <input type ="number" id = "age" class= 'dataInput'></input></li>
+            <li class = "dataEntry">Enter the sex (1=male, 0=female) <input type ="number" id = "sex" class= 'dataInput'></input></li>
+            <li class = "dataEntry">Enter the chest pain type (0=asymptomatic, 1=atypical angina, 2= non-anginal pain, 3=typical angina) <input type ="number" id = "cp" class= 'dataInput'></input></li>
+            <li class = "dataEntry">Enter the resting blood pressure (mmHg) <input type ="number" id = "trestbps" class= 'dataInput'></input></li>
+            <li class = "dataEntry">Enter the serum cholesterol (mg/dl)<input type ="number" id = "chol" class= 'dataInput'></input></li>
+            <li class = "dataEntry">Enter the fasting blood sugar (mg/dl) <input type ="number" id = "fbs" class= 'dataInput'></input></li>
+            <li class = "dataEntry">Enter the resting electrocardiographic results (0 = showing probable or definite left ventricular hypertrophy (Estes' criteria), 1=normal, 2=having ST-T wave abnormality (T wave inversions and/or ST elevation or depression of > 0.05 mV)) <input type ="number" id = "restecg" class= 'dataInput'></input></li>
+            <li class = "dataEntry">Enter the maximum heart rate achieved <input type ="number" id = "thalach" class= 'dataInput'></input></li>
+            <li class = "dataEntry">Enter the exercised induced angina (y/n) <input type ="text" id = "exang" class= 'dataInput'></input></li>
+            <!--FIXME: Oldpeak may need to be changed to text so we can accept decimal values-->
+            <li class = "dataEntry">Enter the ST depression induced by exercise relative to rest (old peak) <input type ="number" id = "oldpeak" class= 'dataInput'></input></li>
+            <li class = "dataEntry">Enter the slope of the peak exercise ST segment(0=downsloping, 1=flat, 2=upsloping) <input type ="number" id = "slope" class= 'dataInput'></input></li>
+            <li class = "dataEntry">Enter the number of major vessels (0-3) colored by flourosopy <input type ="number" id = "ca" class= 'dataInput'></input></li>
+            <li class = "dataEntry">Enter the thalium tracer results (1=fixed defect, 2=normal, 3=reversable defect) <input type ="number" id = "thal" class= 'dataInput'></input></li>
+        </ol>
+        <!--The submit button will be what calls our function--the user is expected to enter all(?) the information before submitting-->
+        <button id="submit" onclick="sendData()">Submit</button>
+        <!--This is reserved for the printing of the result-->
+        <div class = "result"></div>
+    </div>
+    </div>
+  </body>
+</html>
