@@ -88,6 +88,11 @@ def checkValid(encoding):
         if len(encoding) != 1024:
             invalidAttributes.append('encoding')
             print("in")
+        for i in [int(x) for x in encoding]:
+        	if i==0 or i==1:
+        		continue
+        	invalidAttributes.append('encoding')
+        	break
         print(encoding)
         print(encoding)
     except:
