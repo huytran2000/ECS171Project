@@ -24,9 +24,7 @@
     //classes are always referenced with '.CLASS_NAME', id's always referenced with '#ID_NAME'
     var code= $('#code').val();
     console.log("input is,", code);
-    //an ajax post request is a HTTP request sent from the client-side(our View) to the the server-side(our Controller)
-    //an ajax post request is expected to send data/information with it--in our case, a JSON with all the user input
-    //another type of ajax request is a get request--this is usually a request for data to be returned, and does not generally also send data
+    $(".result").text("... Waiting");
       $.ajax({
                   url: "/getModelOutput",
                   type: "POST",
@@ -35,24 +33,18 @@
                     code:code
                   }
               }).done(function(response) {
-                //This functin grabs the results of our operation. We may have incentive to separate these in the future
-                //If we do separate these, this function would then become part of an ajax GET request, as we're asking the server to get the output from the model
-
-                //this html variable is just defining a bunch of html objects in one- 2 line breaks, a paragraph containing "RESULT:" in bold, in a new line/paragraph, the value we recieved as output from the server, and another line break
-                var html= "<br><p> <b> Model Output : <b><p>";
+                var html= "Model Output : ";
                 response =response.result;
                      $.each(response,function(key,val){
                      console.log(val);
-                        html+="<p>"+val+"<p>"
+                        html+=val
                     });
-                    html +="<br>";
-                    //this is putting all the html objects defined in the html variable in the div we instantiated in the body
-                    $(".result").append(html);
+                    //html +="<br>";
+                    //$(".result").append(html);
+                    $(".result").text(html);
                 });
     };</script>
   <body>
-    <!-- yeah all of this can change-->
-    <!--Assigning classes allows for ease of reference--both for CSS styling as well as for script references-->
     <nav>
 
       <!--Home -->
@@ -72,12 +64,9 @@
         <p style="word-break: break-all;"> Sample input: 0000000000100000100000000000000000000000100000000000000000000000000000000000001000100000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000111000010000000010000000000000000000000000001001000000000000000000000000000000000000000001000000000000000000001000000000000000000000000000000000100000000000000000001000000000000000000000000000000000000000000000010000000000000001000000001000000000000000000100010000000000000000000010000001010000010000000000000000000100000000000000000000000000000000000000000000000000000000000000010000000000010000000000000000000010000000000010000000000000001000000000010000000000100000100000000010000000010000000000000000000100000000000000000000000000001000000000000000000000000100000000000000000011000000000000000000000000001010000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000010000000000000000000000010000001000000000000000000000001000000000100000100000000100010000000000000000000000000000000000 </p>
         <!--ul = unordered list-->
         <ol type="1">
-            <!--id's must be unique, should be the feature ids-->
-            <!--li = list item, the input tag represents a generic user input object, the type parameter allows us to limit what the user can entertype ="number"-->
             <li class = "dataEntry">Enter atom encoding (1024 digits) <input id="code" class= 'dataInput'></input></li>
           
         </ol>
-        <!--The submit button will be what calls our function--the user is expected to enter all(?) the information before submitting; onclick="sendData()-->
         <button id="btnSubmit">Submit</button>
         <!--This is reserved for the printing of the result-->
         <div class = "result"> </div>
